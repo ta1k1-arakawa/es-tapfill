@@ -1,0 +1,6 @@
+backend/.env
+backend/.venv/
+extension/dist/
+extension/node_modules/
+extension/tsconfig.tsbuildinfo
+extension/node_modules/.tmp/
