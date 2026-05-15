@@ -13,7 +13,7 @@ export default function CompanyForm({ company, isGenerating, onChange, onGenerat
     <section className="panel-section">
       <div className="section-heading">
         <h2>企業情報</h2>
-        <p>求人票や企業ページを見ながら、分かる範囲で入力してください。</p>
+        <p>求人票や企業ページを見ながら使う項目です。</p>
       </div>
 
       <form
@@ -71,7 +71,7 @@ export default function CompanyForm({ company, isGenerating, onChange, onGenerat
 
         <button className="primary-button" disabled={isGenerating} type="submit">
           <Sparkles size={16} aria-hidden="true" />
-          {isGenerating ? "生成中..." : "AIで提案を作成"}
+          {isGenerating ? "生成中..." : "AI で下書き作成"}
         </button>
       </form>
     </section>

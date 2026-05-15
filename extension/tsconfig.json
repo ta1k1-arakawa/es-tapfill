@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "types": ["chrome", "node"],
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
   },
   "include": ["src", "vite.config.ts"]
 }

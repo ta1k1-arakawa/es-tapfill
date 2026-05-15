@@ -29,9 +29,9 @@ const defaultCompany: Company = {
 };
 
 const tabs: { key: TabKey; label: string }[] = [
-  { key: "profile", label: "基本情報" },
-  { key: "company", label: "企業情報" },
-  { key: "results", label: "生成結果" },
+  { key: "profile", label: "基本" },
+  { key: "company", label: "企業" },
+  { key: "results", label: "生成" },
   { key: "settings", label: "設定" },
 ];
 
@@ -97,7 +97,7 @@ export default function App() {
       setActiveTab("results");
       setNotice("生成しました。");
     } catch (generateError) {
-      const message = generateError instanceof Error ? generateError.message : "AI生成に失敗しました。";
+      const message = generateError instanceof Error ? generateError.message : "AI 生成に失敗しました。";
       setError(message);
     } finally {
       setIsGenerating(false);
@@ -126,7 +126,7 @@ export default function App() {
         const response = await sendInsertMessage(tab.id, text);
         handleInsertResponse(response);
       } catch {
-        setError("まず入力したい欄をクリックしてください。Chrome内部ページには挿入できません。");
+        setError("入力したい欄をクリックしてからもう一度試してください。Chrome 内部ページには挿入できません。");
       }
     }
   }
@@ -157,7 +157,7 @@ export default function App() {
       <header className="app-header">
         <div>
           <p className="eyebrow">ES Tailor</p>
-          <h1>ES入力支援</h1>
+          <h1>ES 下書き作成</h1>
         </div>
         {settings.mockMode && <span className="mock-badge">Mock</span>}
       </header>

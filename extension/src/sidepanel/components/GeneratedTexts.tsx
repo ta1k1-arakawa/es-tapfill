@@ -10,7 +10,7 @@ type Props = {
 
 const resultItems: { key: keyof GeneratedTexts; label: string }[] = [
   { key: "motivation", label: "志望動機" },
-  { key: "selfPr", label: "自己PR" },
+  { key: "selfPr", label: "自己 PR" },
   { key: "research", label: "研究概要" },
   { key: "internship", label: "インターン経験" },
 ];
@@ -20,10 +20,10 @@ export default function GeneratedTextsView({ generatedTexts, hasGenerated, onCop
     <section className="panel-section">
       <div className="section-heading">
         <h2>生成結果</h2>
-        <p>AI生成文は下書きです。提出前に必ず内容を確認してください。</p>
+        <p>提出前に内容を確認してください。</p>
       </div>
 
-      {!hasGenerated && <div className="empty-state">企業情報タブから文章を生成してください。</div>}
+      {!hasGenerated && <div className="empty-state">まだ生成結果がありません。</div>}
 
       <div className="result-list">
         {resultItems.map((item) => {
@@ -34,7 +34,7 @@ export default function GeneratedTextsView({ generatedTexts, hasGenerated, onCop
                 <h3>{item.label}</h3>
                 <span>{text.length}字</span>
               </div>
-              <p>{text || "まだ生成されていません。"}</p>
+              <p>{text || "未生成"}</p>
               <div className="button-row">
                 <button className="secondary-button" disabled={!text} type="button" onClick={() => void onCopy(text)}>
                   <Clipboard size={15} aria-hidden="true" />
@@ -42,7 +42,7 @@ export default function GeneratedTextsView({ generatedTexts, hasGenerated, onCop
                 </button>
                 <button className="secondary-button" disabled={!text} type="button" onClick={() => void onInsert(text)}>
                   <FileInput size={15} aria-hidden="true" />
-                  選択中の欄に挿入
+                  選択欄に挿入
                 </button>
               </div>
             </article>

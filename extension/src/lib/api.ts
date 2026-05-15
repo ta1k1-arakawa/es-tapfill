@@ -63,11 +63,11 @@ export async function generateAll(
       body: JSON.stringify(payload),
     });
   } catch (error) {
-    throw new Error("Backendに接続できません。Backend URLと起動状態を確認してください。");
+    throw new Error("Backend に接続できません。Backend URL と起動状態を確認してください。");
   }
 
   if (!response.ok) {
-    let message = "AI生成に失敗しました。";
+    let message = "AI 生成に失敗しました。";
     try {
       const errorBody = (await response.json()) as { detail?: string };
       message = errorBody.detail ?? message;

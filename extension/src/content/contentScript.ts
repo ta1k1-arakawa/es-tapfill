@@ -52,7 +52,7 @@ if (!windowWithFlag.__esTailorContentScriptLoaded__) {
 
 function insertText(text: string): { success: true } | { success: false; error: string } {
   if (!currentTarget || !document.contains(currentTarget)) {
-    return { success: false, error: "まず入力したい欄をクリックしてください。" };
+    return { success: false, error: "入力したい欄をクリックしてからもう一度試してください。" };
   }
 
   currentTarget = getSupportedTarget(currentTarget);
