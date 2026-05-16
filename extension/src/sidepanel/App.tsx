@@ -156,13 +156,13 @@ export default function App() {
     <main className="app-shell">
       <header className="app-header">
         <div>
-          <p className="eyebrow">ES Tailor</p>
+          <p className="eyebrow">ES TapFill</p>
           <h1>ES 下書き作成</h1>
         </div>
         {settings.mockMode && <span className="mock-badge">Mock</span>}
       </header>
 
-      <nav className="tabs" aria-label="ES Tailor tabs">
+      <nav className="tabs" aria-label="ES TapFill tabs">
         {tabs.map((tab) => (
           <button
             key={tab.key}

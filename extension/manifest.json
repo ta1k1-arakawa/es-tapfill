@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "ES Tailor",
+  "name": "ES TapFill",
   "version": "0.1.0",
   "description": "Generate ES drafts and insert them into selected form fields.",
   "permissions": ["storage", "sidePanel", "activeTab", "scripting"],
   "host_permissions": ["<all_urls>"],
   "action": {
-    "default_title": "ES Tailor"
+    "default_title": "ES TapFill"
   },
   "background": {
     "service_worker": "assets/serviceWorker.js",

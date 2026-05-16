@@ -1,6 +1,6 @@
-# ES Tailor Backend
+# ES TapFill Backend
 
-FastAPI で動く ES Tailor の AI 生成 API です。`POST /generate/all` で、基本情報と企業情報から志望動機、自己 PR、研究概要、インターン経験の下書きを返します。
+FastAPI で動く ES TapFill の AI 生成 API です。`POST /generate/all` で、基本情報と企業情報から志望動機、自己 PR、研究概要、インターン経験の下書きを返します。
 
 ## セットアップ
 

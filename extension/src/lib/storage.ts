@@ -1,9 +1,9 @@
 import type { GeneratedTexts, Profile, Settings } from "./types";
 
 export const STORAGE_KEYS = {
-  profile: "esTailorProfile",
-  settings: "esTailorSettings",
-  lastGenerated: "esTailorLastGenerated",
+  profile: "esTapFillProfile",
+  settings: "esTapFillSettings",
+  lastGenerated: "esTapFillLastGenerated",
 } as const;
 
 export const defaultProfile: Profile = {

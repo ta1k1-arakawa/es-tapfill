@@ -4,7 +4,7 @@ type InsertMessage = {
 };
 
 let currentTarget: HTMLElement | null = null;
-const windowWithFlag = window as Window & { __esTailorContentScriptLoaded__?: boolean };
+const windowWithFlag = window as Window & { __esTapFillContentScriptLoaded__?: boolean };
 
 function isTextInput(element: Element): element is HTMLInputElement {
   return element instanceof HTMLInputElement && ["text", "search"].includes(element.type);
@@ -26,8 +26,8 @@ function getSupportedTarget(element: Element | null): HTMLElement | null {
   return null;
 }
 
-if (!windowWithFlag.__esTailorContentScriptLoaded__) {
-  windowWithFlag.__esTailorContentScriptLoaded__ = true;
+if (!windowWithFlag.__esTapFillContentScriptLoaded__) {
+  windowWithFlag.__esTapFillContentScriptLoaded__ = true;
 
   currentTarget = getSupportedTarget(document.activeElement);
 

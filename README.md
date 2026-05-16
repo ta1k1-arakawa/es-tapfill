@@ -1,12 +1,12 @@
-# ES tapfill
+# ES TapFill
 
-ES tapfill は、就活エントリーシートの下書き作成とフォームへの挿入を支援する Chrome 拡張機能です。  
+ES TapFill は、就活エントリーシートの下書き作成とフォームへの挿入を支援する Chrome 拡張機能です。  
 基本情報はブラウザの `chrome.storage.local` に保存し、AI 生成時だけ backend に送信します。
 
 ## ディレクトリ構成
 
 ```text
-es-tapfill/
+es-TapFill/
 ├─ backend/    # FastAPI backend
 └─ extension/  # Chrome extension
 ```

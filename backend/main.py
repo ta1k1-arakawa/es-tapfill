@@ -15,7 +15,7 @@ except ImportError:
 BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
 
-app = FastAPI(title="ES Tailor API", version="0.1.0")
+app = FastAPI(title="ES TapFill API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
