@@ -11,7 +11,15 @@ import {
   saveProfile,
   saveSettings,
 } from "../lib/storage";
-import type { Company, GeneratedTexts, InsertResponse, Profile, Settings } from "../lib/types";
+import type {
+  Company,
+  GeneratedTexts,
+  InsertResponse,
+  PageAnalysis,
+  PageAnalysisResponse,
+  Profile,
+  Settings,
+} from "../lib/types";
 import CompanyForm from "./components/CompanyForm";
 import GeneratedTextsView from "./components/GeneratedTexts";
 import ProfileForm from "./components/ProfileForm";
@@ -41,16 +49,20 @@ export default function App() {
   const [company, setCompany] = useState<Company>(defaultCompany);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [generatedTexts, setGeneratedTexts] = useState<GeneratedTexts>(defaultGeneratedTexts);
+  const [pageAnalysis, setPageAnalysis] = useState<PageAnalysis | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isAnalyzingPage, setIsAnalyzingPage] = useState(false);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    Promise.all([loadProfile(), loadSettings(), loadLastGenerated()]).then(([savedProfile, savedSettings, savedGenerated]) => {
-      setProfile(savedProfile);
-      setSettings(savedSettings);
-      setGeneratedTexts(savedGenerated);
-    });
+    Promise.all([loadProfile(), loadSettings(), loadLastGenerated()]).then(
+      ([savedProfile, savedSettings, savedGenerated]) => {
+        setProfile(savedProfile);
+        setSettings(savedSettings);
+        setGeneratedTexts(savedGenerated);
+      },
+    );
   }, []);
 
   useEffect(() => {
@@ -80,13 +92,36 @@ export default function App() {
     setNotice("設定を保存しました。");
   }
 
+  async function handleAnalyzePage() {
+    setError("");
+    setNotice("");
+    setIsAnalyzingPage(true);
+
+    try {
+      const tabId = await getActiveTabId();
+      const response = await sendAnalyzeMessage(tabId);
+
+      if (!response.success) {
+        setError(response.error);
+        return;
+      }
+
+      setPageAnalysis(response.analysis);
+      setNotice(`ページから ${response.analysis.fields.length} 件の入力候補を見つけました。`);
+    } catch {
+      setError("このページは解析できませんでした。通常のWebページで開き直して試してください。");
+    } finally {
+      setIsAnalyzingPage(false);
+    }
+  }
+
   async function handleGenerate(nextCompany: Company) {
     setError("");
     setNotice("");
     setIsGenerating(true);
     const normalizedCompany = {
       ...nextCompany,
-      targetLength: Math.min(1200, Math.max(100, nextCompany.targetLength || 400)),
+      targetLength: Math.min(10000, Math.max(100, nextCompany.targetLength || 400)),
     };
     setCompany(normalizedCompany);
 
@@ -95,52 +130,71 @@ export default function App() {
       await saveLastGenerated(generated);
       setGeneratedTexts(generated);
       setActiveTab("results");
-      setNotice("生成しました。");
+      setNotice("文章を生成しました。");
     } catch (generateError) {
-      const message = generateError instanceof Error ? generateError.message : "AI 生成に失敗しました。";
+      const message = generateError instanceof Error ? generateError.message : "AI生成に失敗しました。";
       setError(message);
     } finally {
       setIsGenerating(false);
     }
   }
 
-  async function handleInsert(text: string) {
+  async function handleInsert(text: string, fieldId?: string) {
     setError("");
     setNotice("");
 
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab?.id) {
-      setError("挿入先のタブが見つかりません。");
-      return;
-    }
-
     try {
-      const response = await sendInsertMessage(tab.id, text);
+      const tabId = await getActiveTabId();
+      const response = await sendInsertMessage(tabId, text, fieldId);
       handleInsertResponse(response);
     } catch {
-      try {
-        await chrome.scripting.executeScript({
-          target: { tabId: tab.id },
-          files: ["assets/contentScript.js"],
-        });
-        const response = await sendInsertMessage(tab.id, text);
-        handleInsertResponse(response);
-      } catch {
-        setError("入力したい欄をクリックしてからもう一度試してください。Chrome 内部ページには挿入できません。");
-      }
+      setError("入力欄に挿入できませんでした。ページを解析し直してから試してください。");
     }
   }
 
-  async function sendInsertMessage(tabId: number, text: string): Promise<InsertResponse> {
-    return (await chrome.tabs.sendMessage(tabId, {
-      type: "INSERT_TEXT",
-      text,
-    })) as InsertResponse;
+  async function sendAnalyzeMessage(tabId: number): Promise<PageAnalysisResponse> {
+    try {
+      return (await chrome.tabs.sendMessage(tabId, { type: "ANALYZE_PAGE" })) as PageAnalysisResponse;
+    } catch {
+      await chrome.scripting.executeScript({
+        target: { tabId },
+        files: ["assets/contentScript.js"],
+      });
+      return (await chrome.tabs.sendMessage(tabId, { type: "ANALYZE_PAGE" })) as PageAnalysisResponse;
+    }
+  }
+
+  async function sendInsertMessage(tabId: number, text: string, fieldId?: string): Promise<InsertResponse> {
+    try {
+      return (await chrome.tabs.sendMessage(tabId, {
+        type: "INSERT_TEXT",
+        text,
+        fieldId,
+      })) as InsertResponse;
+    } catch {
+      await chrome.scripting.executeScript({
+        target: { tabId },
+        files: ["assets/contentScript.js"],
+      });
+      return (await chrome.tabs.sendMessage(tabId, {
+        type: "INSERT_TEXT",
+        text,
+        fieldId,
+      })) as InsertResponse;
+    }
+  }
+
+  async function getActiveTabId(): Promise<number> {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab?.id) {
+      throw new Error("No active tab");
+    }
+    return tab.id;
   }
 
   function handleInsertResponse(response: InsertResponse) {
     if (response.success) {
-      setNotice("選択中の欄に挿入しました。");
+      setNotice("入力欄に挿入しました。");
     } else {
       setError(response.error ?? "挿入できませんでした。");
     }
@@ -157,7 +211,7 @@ export default function App() {
       <header className="app-header">
         <div>
           <p className="eyebrow">ES TapFill</p>
-          <h1>ES 下書き作成</h1>
+          <h1>ES下書き作成</h1>
         </div>
         {settings.mockMode && <span className="mock-badge">Mock</span>}
       </header>
@@ -180,12 +234,21 @@ export default function App() {
 
       {activeTab === "profile" && <ProfileForm profile={profile} onSave={handleSaveProfile} />}
       {activeTab === "company" && (
-        <CompanyForm company={company} isGenerating={isGenerating} onChange={setCompany} onGenerate={handleGenerate} />
+        <CompanyForm
+          company={company}
+          isAnalyzingPage={isAnalyzingPage}
+          isGenerating={isGenerating}
+          pageAnalysis={pageAnalysis}
+          onAnalyzePage={handleAnalyzePage}
+          onChange={setCompany}
+          onGenerate={handleGenerate}
+        />
       )}
       {activeTab === "results" && (
         <GeneratedTextsView
           generatedTexts={generatedTexts}
           hasGenerated={hasGenerated}
+          pageFields={pageAnalysis?.fields ?? []}
           onCopy={handleCopy}
           onInsert={handleInsert}
         />

@@ -17,7 +17,7 @@ class Company(BaseModel):
     business: str = ""
     job_description: str = ""
     attractive_point: str = ""
-    target_length: int = Field(default=400, ge=100, le=1200)
+    target_length: int = Field(default=400, ge=100, le=10000)
 
 
 class GenerateAllRequest(BaseModel):

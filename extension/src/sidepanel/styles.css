@@ -225,6 +225,16 @@ h3 {
   padding: 8px 10px;
 }
 
+.secondary-button.full-width {
+  width: 100%;
+}
+
+.secondary-button.compact-button {
+  min-height: 32px;
+  padding: 6px 9px;
+  width: 100%;
+}
+
 .empty-state {
   border: 1px dashed #bdcbc7;
   border-radius: 8px;
@@ -234,6 +244,95 @@ h3 {
   line-height: 1.5;
   padding: 16px;
   text-align: center;
+}
+
+.empty-state.compact {
+  padding: 10px;
+}
+
+.page-scan-panel {
+  border: 1px solid #d6e0dd;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.page-scan-header {
+  display: grid;
+  gap: 10px;
+}
+
+.page-scan-header p {
+  color: #697780;
+  font-size: 12px;
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+.page-analysis {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.page-meta {
+  display: grid;
+  gap: 4px;
+}
+
+.page-meta span {
+  color: #5e6e78;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.page-meta strong {
+  color: #1d2b36;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.candidate-list {
+  display: grid;
+  gap: 9px;
+}
+
+.candidate-list-heading,
+.candidate-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.candidate-list-heading span,
+.candidate-card-header span {
+  color: #6d7b83;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.candidate-card {
+  border: 1px solid #e0e8e5;
+  border-radius: 8px;
+  background: #fbfdfc;
+  padding: 10px;
+}
+
+.candidate-card h4 {
+  color: #182a35;
+  font-size: 13px;
+  line-height: 1.35;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.candidate-card p {
+  color: #61717a;
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 6px 0 9px;
+  overflow-wrap: anywhere;
 }
 
 .result-list {
@@ -276,8 +375,45 @@ h3 {
   margin-top: 12px;
 }
 
+.matched-targets {
+  display: grid;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.matched-targets span {
+  color: #5d6f78;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.target-button {
+  border: 1px solid #d7e2df;
+  border-radius: 8px;
+  background: #f8fbfa;
+  color: #243744;
+  font-size: 12px;
+  line-height: 1.35;
+  min-height: 32px;
+  overflow: hidden;
+  padding: 7px 9px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.target-button:hover {
+  border-color: #2f8b7f;
+  background: #edf8f5;
+}
+
 @media (min-width: 360px) {
   .button-row {
     grid-template-columns: auto 1fr;
+  }
+
+  .page-scan-header {
+    align-items: start;
+    grid-template-columns: 1fr auto;
   }
 }

@@ -51,7 +51,7 @@ def generate_with_openai(request: GenerateAllRequest) -> GeneratedResponse:
     except AIClientError:
         raise
     except Exception as exc:
-        raise AIClientError(f"OpenAI API での生成に失敗しました: {exc}") from exc
+        raise AIClientError(f"OpenAI APIでの生成に失敗しました: {exc}") from exc
 
 
 def generate_with_gemini(request: GenerateAllRequest) -> GeneratedResponse:
@@ -68,18 +68,18 @@ def generate_with_gemini(request: GenerateAllRequest) -> GeneratedResponse:
     except AIClientError:
         raise
     except Exception as exc:
-        raise AIClientError(f"Gemini API での生成に失敗しました: {exc}") from exc
+        raise AIClientError(f"Gemini APIでの生成に失敗しました: {exc}") from exc
 
 
 def parse_generated_response(content: str | None) -> GeneratedResponse:
     if not content:
-        raise AIClientError("AI から空の応答が返されました。")
+        raise AIClientError("AIから空の応答が返されました。")
 
     try:
         data: dict[str, Any] = json.loads(strip_code_fence(content))
         return GeneratedResponse.model_validate(data)
     except Exception as exc:
-        raise AIClientError("AI の応答を JSON として解釈できませんでした。もう一度生成してください。") from exc
+        raise AIClientError("AIの応答をJSONとして解析できませんでした。もう一度生成してください。") from exc
 
 
 def strip_code_fence(content: str) -> str:
@@ -103,25 +103,29 @@ def build_mock_response(request: GenerateAllRequest) -> GeneratedResponse:
     business = company.business or "事業内容"
     job_description = company.job_description or "求人内容"
     target = company.target_length
+    self_pr_seed = profile.self_pr or "目標に向けて粘り強く取り組めること"
+    values_seed = profile.values or "相手の立場を考えて行動する姿勢"
+    research_seed = profile.research or "現在取り組んでいる研究内容"
+    internship_seed = profile.internship or "これまでのインターン経験"
 
     motivation = (
         f"私が{company_name}の{job_type}を志望する理由は、{business}に取り組む中で、"
         f"自分の経験や価値観を生かせると感じたためです。特に{attractive}に強く惹かれています。"
-        "これまでの研究や学びで培った課題を整理し、周囲と協力しながら形にしていく姿勢を生かし、"
+        "これまでの学びで培った課題を整理し、周囲と協力しながら形にしていく姿勢を生かし、"
         "貴社で価値を生み出したいです。"
     )
     self_pr = (
-        f"私の強みは、{profile.self_pr or '目標に向けて粘り強く取り組めること'}です。"
-        f"{company_name}の{job_type}においても、{profile.values or '相手の立場を考える姿勢'}を大切にし、"
+        f"私の強みは、{self_pr_seed}です。"
+        f"{company_name}の{job_type}においても、{values_seed}を大切にし、"
         "状況を丁寧に整理しながら着実に行動したいと考えています。"
     )
     research = (
-        f"私の研究概要は、{profile.research or '現在入力されている研究内容'}です。"
+        f"私の研究概要は、{research_seed}です。"
         f"研究で意識してきた仮説検証や情報整理の姿勢は、{company_name}の{job_description}においても、"
         "業務理解や課題解決に生かせると考えています。"
     )
     internship = (
-        f"インターン経験では、{profile.internship or '入力された経験'}を通じて、"
+        f"インターン経験では、{internship_seed}を通じて、"
         "実務で求められる連携や改善の重要性を学びました。"
         f"この経験を、{company_name}で求められる{job_type}の仕事に向き合う際にも生かしたいです。"
     )

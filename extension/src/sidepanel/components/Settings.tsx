@@ -18,7 +18,7 @@ export default function SettingsView({ settings, onSave }: Props) {
     <section className="panel-section">
       <div className="section-heading">
         <h2>設定</h2>
-        <p>Mock は API キーなしで動作確認するためのモードです。</p>
+        <p>Mockモードは、APIキーなしで動作確認するためのモードです。</p>
       </div>
 
       <form
@@ -43,7 +43,7 @@ export default function SettingsView({ settings, onSave }: Props) {
             type="checkbox"
             onChange={(event) => setDraft({ ...draft, mockMode: event.target.checked })}
           />
-          <span>Mock 生成モード</span>
+          <span>Mock生成モード</span>
         </label>
 
         <button className="primary-button" type="submit">
