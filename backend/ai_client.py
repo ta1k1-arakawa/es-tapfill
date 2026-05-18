@@ -36,7 +36,7 @@ def generate_with_openai(request: GenerateAllRequest) -> GeneratedResponse:
         from openai import OpenAI
 
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        model = os.getenv("OPENAI_MODEL", "gpt-5.4-nano")
         completion = client.chat.completions.create(
             model=model,
             messages=[

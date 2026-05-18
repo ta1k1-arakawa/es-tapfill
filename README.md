@@ -37,7 +37,7 @@ Copy-Item .env.example .env
 ```env
 AI_PROVIDER=openai
 OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4o-mini
+OPENAI_MODEL=gpt-5.4-nano
 GEMINI_API_KEY=
 GEMINI_MODEL=gemini-1.5-flash
 ```
